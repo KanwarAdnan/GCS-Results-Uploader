@@ -16,55 +16,42 @@
   </head>
   <body>
     <div class="container">
-      <div class="subContainer">
-        <div class="header">
-          <img
-            class="headerLogo"
-            src="gcs_logo.png"
-            alt="GCS_Logo"
-          />
-          <h1 class="headerText">GCS Results Uploader</h1>
+        <div class="subContainer">
+            <div class="header">
+                <img class="headerLogo" src="gcs_logo.png" alt="GCS_Logo">
+                <h1 class="headerText">GCS Results Uploader</h1>
+            </div>
+
+            <div class="button-area">
+                <label class="file-input-container">
+                    <i class="fa fa-cloud-upload" aria-hidden="true"></i>
+                    <span class="file-input-text">CLICK HERE TO UPLOAD</span>
+                    <input type="file" id="fileInput" multiple class="file-input">
+                </label>
+ 
+                <button class="action-buttons" id="uploadButton">Upload</button>
+            </div>
+
+            <div class="file-area">
+                <table id="fileTable">
+                    <thead>
+                        <tr>
+                            <th>File Name</th>
+                            <th>Size</th>
+                            <th>Status</th>
+                            <th>Progress</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- File details will be displayed here dynamically -->
+                    </tbody>
+                </table>				
+    			<div id="uploadStatusMessage" class="upload-status">
+
+				</div>
         </div>
-        <!--CSS DONE -->
-
-        <!-- !....  SECTION-1 STARTS  ....! -->
-        <div class="button-area">
-          <label class="file-input-container">
-            <i class="fa fa-cloud-upload" aria-hidden="true"></i>
-            <span class="file-input-text">CLICK HERE TO</span>
-            <input type="file" id="fileInput" multiple class="file-input" />
-          </label>
-          <!-- !.... BUTTON SECTION STARTS ....! -->
-          <div class="buttons">
-            <button class="action-buttons" id="uploadButton">Upload</button>
-            <button class="action-buttons" id="clearButton">Clear All</button>
-          </div>
-          <!-- !.... BUTTON SECTION ENDS ....! -->
-        </div>
-
-        <!-- !....  SECTION-1 ENDS  ....! -->
-
-        <!-- !....  SECTION-2 STARTS  ....! -->
-
-        <div class="file-area">
-          <table id="fileTable">
-            <thead>
-              <tr>
-                <th>File Name</th>
-                <th>Size</th>
-                <th>Status</th>
-                <th>Progress</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              <!-- File details will be displayed here dynamically -->
-            </tbody>
-          </table>
-        </div>
-        <!-- !....  SECTION-2 STARTS  ....! -->
-      </div>
     </div>
     <script src="script.js"></script>
-  </body>
+</body>
 </html>

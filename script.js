@@ -1,29 +1,31 @@
-// Get DOM elements
 const fileInput = document.getElementById('fileInput');
 const fileTableBody = document.querySelector('#fileTable tbody');
 const uploadButton = document.getElementById('uploadButton');
 const clearButton = document.getElementById('clearButton');
 const fileTable = document.getElementById('fileTable');
+const uploadStatusMessage = document.getElementById('uploadStatusMessage');
 
-// Event listeners
-clearButton.addEventListener('click', clearFileInput);
+let uploadedFiles = 0;
+let failedFiles = 0;
 
 uploadButton.addEventListener('click', () => {
+  uploadStatusMessage.textContent = '';
   toggleFileTable();
   handleFileUpload();
 });
 
-// Function to show or hide the table
 function toggleFileTable() {
-  if (fileInput.files.length > 0) {
-    fileTable.style.display = 'table';
-  } else {
-    fileTable.style.display = 'none';
-  }
+  fileTable.style.display = fileInput.files.length > 0 ? 'table' : 'none';
 }
 
-async function handleFileUpload() {
+fileInput.addEventListener('change', () => {
+  updateStatusMessageOnFileChange();
+});
+
+function handleFileUpload() {
   const files = fileInput.files;
+  const totalFiles = files.length;
+
   for (const file of files) {
     const row = document.createElement('tr');
     row.innerHTML = `
@@ -36,10 +38,21 @@ async function handleFileUpload() {
     fileTableBody.appendChild(row);
 
     try {
-      await uploadFile(file, row);
+      uploadFile(file, row).then(() => {
+        uploadedFiles++;
+        if (uploadedFiles + failedFiles === totalFiles) {
+          updateUploadStatusMessage(uploadedFiles, failedFiles);
+          clearFileInput();
+        }
+      });
     } catch (error) {
       console.error('Upload error:', error);
       row.querySelector('td:nth-child(3)').textContent = 'Failed';
+      failedFiles++;
+      if (uploadedFiles + failedFiles === totalFiles) {
+        updateUploadStatusMessage(uploadedFiles, failedFiles);
+        clearFileInput();
+      }
     }
 
     const deleteButton = row.querySelector('.delete-button');
@@ -53,6 +66,8 @@ function clearFileInput() {
   fileInput.value = '';
   fileTableBody.innerHTML = '';
   fileTable.style.display = 'none';
+  uploadedFiles = 0;
+  failedFiles = 0;
 }
 
 function formatFileSize(bytes) {
@@ -84,4 +99,19 @@ async function uploadFile(file, row) {
     console.error('Upload error:', error);
     row.querySelector('td:nth-child(3)').textContent = 'Failed';
   }
+}
+
+function updateUploadStatusMessage(uploaded, failed) {
+  const totalFiles = uploaded + failed;
+  const message = `${uploaded} out of ${totalFiles} files uploaded successfully.`;
+  uploadStatusMessage.textContent = failed > 0
+    ? `${message} ${failed} files failed to upload.`
+    : message;
+}
+
+function updateStatusMessageOnFileChange() {
+  const selectedFilesCount = fileInput.files.length;
+  uploadStatusMessage.textContent = selectedFilesCount > 0
+    ? `Number of files selected: ${selectedFilesCount}. Press upload.`
+    : '';
 }
