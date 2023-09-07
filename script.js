@@ -68,7 +68,7 @@ async function uploadFile(file, row) {
   formData.append('file', file);
 
   try {
-    const apiUrl = 'https://gcs-bs-results-vvicnw7txq-uc.a.run.app/upload';
+    const apiUrl = 'https://gcs-bs-results-vvicnw7txq-uc.a.run.app/upload/';
     const response = await fetch(apiUrl, {
       method: 'POST',
       body: formData,
