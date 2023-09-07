@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Dosis:wght@200;300;400;500;600&family=Poppins:wght@200;300;400;500;600&family=Roboto:ital,wght@0,300;1,300&display=swap"
+      rel="stylesheet"
+      />
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <title>GCS RESULTS UPLOADER</title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="subContainer">
+        <div class="header">
+          <img
+            class="headerLogo"
+            src="gcs_logo.png"
+            alt="GCS_Logo"
+          />
+          <h1 class="headerText">GCS Results Uploader</h1>
+        </div>
+        <!--CSS DONE -->
+
+        <!-- !....  SECTION-1 STARTS  ....! -->
+        <div class="button-area">
+          <label class="file-input-container">
+            <i class="fa fa-cloud-upload" aria-hidden="true"></i>
+            <span class="file-input-text">CLICK HERE TO</span>
+            <input type="file" id="fileInput" multiple class="file-input" />
+          </label>
+          <!-- !.... BUTTON SECTION STARTS ....! -->
+          <div class="buttons">
+            <button class="action-buttons" id="uploadButton">Upload</button>
+            <button class="action-buttons" id="clearButton">Clear All</button>
+          </div>
+          <!-- !.... BUTTON SECTION ENDS ....! -->
+        </div>
+
+        <!-- !....  SECTION-1 ENDS  ....! -->
+
+        <!-- !....  SECTION-2 STARTS  ....! -->
+
+        <div class="file-area">
+          <table id="fileTable">
+            <thead>
+              <tr>
+                <th>File Name</th>
+                <th>Size</th>
+                <th>Status</th>
+                <th>Progress</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- File details will be displayed here dynamically -->
+            </tbody>
+          </table>
+        </div>
+        <!-- !....  SECTION-2 STARTS  ....! -->
+      </div>
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>
