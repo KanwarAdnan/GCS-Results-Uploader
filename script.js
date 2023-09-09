@@ -127,17 +127,11 @@ function updateStatusMessageOnFileChange() {
     : '';
 }
 
-// Your existing main page JavaScript code goes here (the code you provided earlier).
 
 // Check if a token is present in localStorage when the page loads
 document.addEventListener("DOMContentLoaded", function () {
     const token = localStorage.getItem('access_token');
     if (token) {
-        // Token is present, do something with it (e.g., display authenticated content)
-        // For example, you can make authenticated API requests using the token.
-        // You can also redirect to a different page or perform other actions.
-        console.log('Authenticated with token:', token);
-
         // Add an event listener to the logout button
         const logOutButton = document.getElementById('logOut');
         logOutButton.addEventListener('click', () => {
@@ -152,7 +146,6 @@ document.addEventListener("DOMContentLoaded", function () {
         const loginButton = document.getElementById('loginButton');
         loginButton.addEventListener('click', () => {
             // Open the login page in a new window or redirect to it
-            // You can customize this behavior based on your requirements
             window.open('login/login.html', '_blank'); // Opens the login page in a new window
             // Alternatively, you can use window.location.href to redirect
         });
