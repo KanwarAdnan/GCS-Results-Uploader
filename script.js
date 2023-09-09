@@ -22,46 +22,6 @@ fileInput.addEventListener('change', () => {
   updateStatusMessageOnFileChange();
 });
 
-function handleFileUpload() {
-  const files = fileInput.files;
-  const totalFiles = files.length;
-
-  for (const file of files) {
-    const row = document.createElement('tr');
-    row.innerHTML = `
-      <td>${file.name}</td>
-      <td>${formatFileSize(file.size)}</td>
-      <td>Uploading...</td>
-      <td><progress value="0" max="100"></progress></td>
-      <td><button class="delete-button">X</button></td>
-    `;
-    fileTableBody.appendChild(row);
-
-    try {
-      uploadFile(file, row).then(() => {
-        uploadedFiles++;
-        if (uploadedFiles + failedFiles === totalFiles) {
-          updateUploadStatusMessage(uploadedFiles, failedFiles);
-          clearFileInput();
-        }
-      });
-    } catch (error) {
-      console.error('Upload error:', error);
-      row.querySelector('td:nth-child(3)').textContent = 'Failed';
-      failedFiles++;
-      if (uploadedFiles + failedFiles === totalFiles) {
-        updateUploadStatusMessage(uploadedFiles, failedFiles);
-        clearFileInput();
-      }
-    }
-
-    const deleteButton = row.querySelector('.delete-button');
-    deleteButton.addEventListener('click', () => {
-      fileTableBody.removeChild(row);
-    });
-  }
-}
-
 function clearFileInput() {
   fileInput.value = '';
   fileTableBody.innerHTML = '';
@@ -77,6 +37,55 @@ function formatFileSize(bytes) {
   const i = Math.floor(Math.log(bytes) / Math.log(k));
   return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
 }
+
+async function handleFileUpload() {
+  const files = fileInput.files;
+  const totalFiles = files.length;
+  const uploadPromises = [];
+
+  for (const file of files) {
+    const row = document.createElement('tr');
+    row.innerHTML = `
+      <td>${file.name}</td>
+      <td>${formatFileSize(file.size)}</td>
+      <td>Uploading...</td>
+      <td><progress value="0" max="100"></progress></td>
+      <td><button class="delete-button">X</button></td>
+    `;
+    fileTableBody.appendChild(row);
+
+    const uploadPromise = uploadFile(file, row)
+      .then((status) => {
+        if (status === 200) {
+          uploadedFiles++;
+        } else {
+          failedFiles++;
+        }
+      })
+      .catch((error) => {
+        console.error('Upload error:', error);
+        row.querySelector('td:nth-child(3)').textContent = 'Failed';
+        failedFiles++;
+      });
+
+    uploadPromises.push(uploadPromise);
+
+    const deleteButton = row.querySelector('.delete-button');
+    deleteButton.addEventListener('click', () => {
+      fileTableBody.removeChild(row);
+    });
+  }
+
+  try {
+    await Promise.all(uploadPromises);
+  } catch (error) {
+    console.error('One or more uploads failed:', error);
+  }
+
+  updateUploadStatusMessage(uploadedFiles, failedFiles);
+  clearFileInput();
+}
+
 
 async function uploadFile(file, row) {
   const formData = new FormData();
@@ -99,17 +108,24 @@ async function uploadFile(file, row) {
       headers: headers, // Add headers to the request
     });
 
-    if (response.ok) {
+    if (response.status === 200) {
+      // The upload was successful (status code 200)
       row.querySelector('td:nth-child(3)').textContent = 'Uploaded';
       row.querySelector('progress').value = 100;
+      return 200; // Return 200 for success
     } else {
+      // The upload failed (status code other than 200)
       row.querySelector('td:nth-child(3)').textContent = 'Failed';
+      return response.status; // Return the actual status code for failure
     }
   } catch (error) {
     console.error('Upload error:', error);
     row.querySelector('td:nth-child(3)').textContent = 'Failed';
+    return 500; // Return a default status code for errors
   }
 }
+
+
 
 
 function updateUploadStatusMessage(uploaded, failed) {
@@ -127,11 +143,16 @@ function updateStatusMessageOnFileChange() {
     : '';
 }
 
+// Your existing main page JavaScript code goes here (the code you provided earlier).
 
 // Check if a token is present in localStorage when the page loads
 document.addEventListener("DOMContentLoaded", function () {
     const token = localStorage.getItem('access_token');
     if (token) {
+        // Token is present, do something with it (e.g., display authenticated content)
+        // For example, you can make authenticated API requests using the token.
+        // You can also redirect to a different page or perform other actions.
+
         // Add an event listener to the logout button
         const logOutButton = document.getElementById('logOut');
         logOutButton.addEventListener('click', () => {
@@ -146,6 +167,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const loginButton = document.getElementById('loginButton');
         loginButton.addEventListener('click', () => {
             // Open the login page in a new window or redirect to it
+            // You can customize this behavior based on your requirements
             window.open('login/login.html', '_blank'); // Opens the login page in a new window
             // Alternatively, you can use window.location.href to redirect
         });

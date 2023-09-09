@@ -18,7 +18,7 @@
                 <label class="file-input-container">
                     <i class="fa fa-cloud-upload" aria-hidden="true"></i>
                     <span class="file-input-text">CLICK HERE TO UPLOAD</span>
-                    <input type="file" id="fileInput" multiple class="file-input">
+                    <input type="file" id="fileInput" multiple class="file-input" accept=".zip" capture="filesystem">
                 </label>
  
                 <button class="action-buttons" id="uploadButton">Upload</button>
@@ -39,7 +39,8 @@
                     <tbody>
                         <!-- File details will be displayed here dynamically -->
                     </tbody>
-                </table>				
+                </table>	
+				
                 <div id="uploadStatusMessage" class="upload-status"></div>
             </div>
         </div>
