@@ -83,10 +83,20 @@ async function uploadFile(file, row) {
   formData.append('file', file);
 
   try {
-    const apiUrl = 'https://gcs-bs-results-vvicnw7txq-uc.a.run.app/upload/';
+    const apiUrl = 'https://gcs-vvicnw7txq-uc.a.run.app/upload/';
+    
+    // Get the access token from localStorage
+    const accessToken = localStorage.getItem('access_token');
+    
+    // Create headers with the access token
+    const headers = new Headers({
+      'Authorization': `Bearer ${accessToken}`,
+    });
+    
     const response = await fetch(apiUrl, {
       method: 'POST',
       body: formData,
+      headers: headers, // Add headers to the request
     });
 
     if (response.ok) {
@@ -100,6 +110,7 @@ async function uploadFile(file, row) {
     row.querySelector('td:nth-child(3)').textContent = 'Failed';
   }
 }
+
 
 function updateUploadStatusMessage(uploaded, failed) {
   const totalFiles = uploaded + failed;
@@ -115,3 +126,57 @@ function updateStatusMessageOnFileChange() {
     ? `Number of files selected: ${selectedFilesCount}. Press upload.`
     : '';
 }
+
+// Your existing main page JavaScript code goes here (the code you provided earlier).
+
+// Check if a token is present in localStorage when the page loads
+document.addEventListener("DOMContentLoaded", function () {
+    const token = localStorage.getItem('access_token');
+    if (token) {
+        // Token is present, do something with it (e.g., display authenticated content)
+        // For example, you can make authenticated API requests using the token.
+        // You can also redirect to a different page or perform other actions.
+        console.log('Authenticated with token:', token);
+
+        // Add an event listener to the logout button
+        const logOutButton = document.getElementById('logOut');
+        logOutButton.addEventListener('click', () => {
+            // Clear the token from localStorage
+            localStorage.removeItem('access_token');
+
+            // Redirect to the login page
+            window.location.href = 'login/login.html'; // Replace with the actual login page URL
+        });
+    } else {
+        // Token is not present, add an event listener to open the login page
+        const loginButton = document.getElementById('loginButton');
+        loginButton.addEventListener('click', () => {
+            // Open the login page in a new window or redirect to it
+            // You can customize this behavior based on your requirements
+            window.open('login/login.html', '_blank'); // Opens the login page in a new window
+            // Alternatively, you can use window.location.href to redirect
+        });
+    }
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+    // Check if the access token is present in localStorage
+    const accessToken = localStorage.getItem('access_token');
+
+    if (accessToken) {
+        // Access token is present, add the event listener for logout
+        const logOutButton = document.getElementById("logOut");
+        logOutButton.addEventListener("click", function () {
+            // Remove the access token from localStorage
+            localStorage.removeItem('access_token');
+            // Redirect to the login page or perform any other actions you need
+            // For example, you can redirect to the login page:
+            window.location.href = 'login/login.html';
+        });
+    } else {
+        // Access token is not present, handle this scenario (e.g., show the login form)
+        // You can display the login form or perform other actions here
+        // For example, you can show a message or redirect to the login page:
+        window.location.href = 'login/login.html';
+    }
+});
