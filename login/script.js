@@ -29,7 +29,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 // Successful authentication, the access token is in the response JSON
                 const response = JSON.parse(xhr.responseText);
                 const accessToken = response.access_token;
-                console.log('Access Token:', accessToken);
 
                 // Set the access token in localStorage with an expiration of 1 day
                 const expirationTime = new Date().getTime() + (1 * 24 * 60 * 60 * 1000); // 1 day in milliseconds
