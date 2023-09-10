@@ -15,6 +15,7 @@ uploadButton.addEventListener('click', () => {
   toggleFileTable();
   clearFileTable();
   handleFileUpload(selectedFiles);
+  selectedFiles = [];
 });
 
 function toggleFileTable() {
@@ -28,6 +29,36 @@ function toggleFileTable() {
   }
 }
 
+fileInput.addEventListener('change', () => {
+  const files = fileInput.files;
+  
+  for (const file of files) {
+    if (!file.name.endsWith('.zip')) continue;
+    
+    selectedFiles.push(file);
+    
+    const row = document.createElement('tr');
+    row.innerHTML = `
+      <td>${file.name}</td>
+      <td>${formatFileSize(file.size)}</td>
+      <td>Waiting</td>
+      <td><progress value="0" max="100"></progress></td>
+      <td><button class="delete-button">X</button></td>
+    `;
+    fileTableBody.appendChild(row);
+    
+    const deleteButton = row.querySelector('.delete-button');
+    deleteButton.addEventListener('click', () => {
+      selectedFiles = selectedFiles.filter((selectedFile) => selectedFile !== file);
+      fileTableBody.removeChild(row);
+      toggleFileTable();
+      updateStatusMessageOnFileChange();
+    });
+  }
+  
+  toggleFileTable();
+  updateStatusMessageOnFileChange();
+});
 
 function showUploadButton() {
   uploadButton.style.display = 'inline'; 
@@ -39,36 +70,8 @@ function clearFileInput() {
   fileTable.style.display = 'none';
   uploadedFiles = 0;
   failedFiles = 0;
-  selectedFiles = [];
   uploadButton.style.display = 'none'; 
 }
-
-fileInput.addEventListener('change', () => {
-  fileTableBody.innerHTML = '';
-  const files = fileInput.files;
-  for (const file of files) {
-    if (!file.name.endsWith('.zip')) continue;
-    const row = document.createElement('tr');
-    row.innerHTML = `
-      <td>${file.name}</td>
-      <td>${formatFileSize(file.size)}</td>
-      <td>Waiting</td>
-      <td><progress value="0" max="100"></progress></td>
-      <td><button class="delete-button">X</button></td>
-    `;
-    fileTableBody.appendChild(row);
-    const deleteButton = row.querySelector('.delete-button');
-    deleteButton.addEventListener('click', () => {
-      fileTableBody.removeChild(row);
-      selectedFiles = selectedFiles.filter((selectedFile) => selectedFile !== file);
-      toggleFileTable();
-      updateStatusMessageOnFileChange();
-    });
-    selectedFiles.push(file);
-  }
-  toggleFileTable();
-  updateStatusMessageOnFileChange();
-});
 
 async function handleFileUpload(filesToUpload) {
   const uploadPromises = [];
