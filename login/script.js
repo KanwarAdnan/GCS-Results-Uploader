@@ -8,8 +8,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const username = document.getElementById("username").value;
         const password = document.getElementById("password").value;
 
-        // Replace with your API URL
-        const apiURL = 'https://gcs-vvicnw7txq-uc.a.run.app/token';
+        const apiURL = 'https://gcs-bs-results-vvicnw7txq-uc.a.run.app/token';
 
         // Define the request data
         const requestData = new URLSearchParams();
@@ -29,11 +28,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 // Successful authentication, the access token is in the response JSON
                 const response = JSON.parse(xhr.responseText);
                 const accessToken = response.access_token;
+                console.log('Access Token:', accessToken);
 
-                // Set the access token in localStorage with an expiration of 1 day
-                const expirationTime = new Date().getTime() + (1 * 24 * 60 * 60 * 1000); // 1 day in milliseconds
+                // Save the access token in localStorage
                 localStorage.setItem('access_token', accessToken);
-                localStorage.setItem('access_token_expiration', expirationTime);
 
                 // Redirect to the index.html page
                 window.location.href = '../index.html';
@@ -49,24 +47,20 @@ document.addEventListener("DOMContentLoaded", function () {
         xhr.send(requestData);
     });
 
-    // Check if an access token is present in localStorage and if it has expired
+    // Check if an access token is present in localStorage
     const accessToken = localStorage.getItem('access_token');
-    const expirationTime = localStorage.getItem('access_token_expiration');
-    const currentTime = new Date().getTime();
 
-    if (accessToken && expirationTime && currentTime < expirationTime) {
-        // Access token is present and has not expired
-        // Add the event listener for logout
+    if (accessToken) {
+        // Access token is present, add the event listener for logout
         const logOutButton = document.getElementById("logOut");
         logOutButton.addEventListener("click", function () {
-            // Remove the access token and expiration time from localStorage
+            // Remove the access token from localStorage
             localStorage.removeItem('access_token');
-            localStorage.removeItem('access_token_expiration');
             // Redirect to the login page
             window.location.href = 'login.html';
         });
 
-        // Redirect to the index.html page when the token is present and valid
+        // Redirect to the index.html page when the token is present
         window.location.href = '../index.html';
     }
 });
