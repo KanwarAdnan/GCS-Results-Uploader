@@ -74,6 +74,7 @@ function clearFileInput() {
 }
 
 async function handleFileUpload(filesToUpload) {
+  fileInput.disabled = true;
   const uploadPromises = [];
 
   for (const file of filesToUpload) {
@@ -108,6 +109,8 @@ async function handleFileUpload(filesToUpload) {
     await Promise.all(uploadPromises);
   } catch (error) {
     console.error('One or more uploads failed:', error);
+  } finally {
+    fileInput.disabled = false;
   }
 
   updateUploadStatusMessage(uploadedFiles, failedFiles);
