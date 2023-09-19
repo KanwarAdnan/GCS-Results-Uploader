@@ -122,7 +122,7 @@ async function uploadFile(file, row) {
   formData.append('file', file);
 
   try {
-    const apiUrl = 'https://gcs-bs-results-vvicnw7txq-uc.a.run.app/upload/';
+    const apiUrl = 'https://gcs-bs-results-vvicnw7txq-uc.a.run.app/users/upload/results/';
     const accessToken = localStorage.getItem('access_token');
     const headers = new Headers({
       'Authorization': `Bearer ${accessToken}`,
