@@ -7,8 +7,9 @@ document.addEventListener("DOMContentLoaded", function () {
         // Get the username and password from the form
         const username = document.getElementById("username").value;
         const password = document.getElementById("password").value;
-
-        const apiURL = 'https://gcs-bs-results-vvicnw7txq-uc.a.run.app/token';
+        // old
+        // https://gcs-bs-results-vvicnw7txq-uc.a.run.app/token
+        const apiURL = 'https://gcs-bs-portal-vvicnw7txq-uc.a.run.app/token';
 
         // Define the request data
         const requestData = new URLSearchParams();
